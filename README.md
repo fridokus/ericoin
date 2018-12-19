@@ -9,4 +9,26 @@ Start by running ``generate_keys.py``. This will create a private and public key
 ## Register remote nodes
 To add remote nodes to your network, use the script ``register_nodes.py``. To add nodes outside your LAN they will have to open ports.
 
+Since miner nodes are busy mining, requests to these nodes might have a delayed response. The idea of a bookkeeping node is to keep track of the longest chain and resolve conflicts; it is this node that should be connected to the rest of the network and exchange information. It should look something like this:
+
+```
+
+        M       M
+        |       |
+        |       |
+        ----B----
+            |
+            |      ----M
+            |      |
+            +------B
+            |      |
+            |      ----M
+            |
+        ----B----
+        |       |
+        |       |
+        M       M
+```
+where `M` is a miner and `B` a bookkeeper, two miners and one bookkeeper for each node in this case.
+
 
