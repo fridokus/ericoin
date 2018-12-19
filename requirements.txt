@@ -1,0 +1,5 @@
+git+git://github.com/keis/base58
+django
+ecdsa
+flask
+requests
