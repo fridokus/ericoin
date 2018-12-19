@@ -1,0 +1,103 @@
+{# Page Header and Styling #}
+<head>
+    <title>Ericoin Transactions</title>
+</head>
+<style type="text/css">
+    h1 {
+        color: navy; 
+        font-family: "Verdana", Geneva, sans-serif;
+        }
+    table {
+        border: 3px solid navy;
+        border-radius: 10px;
+        color: navy
+        font-family: "Courier New", Courier, monospace;
+        }
+    td {
+        color: navy;
+        font-family: "Courier New", Courier, monospace;
+        text-align: left
+        }
+    th {
+        color: navy;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 20;
+        text-align: center
+        }
+    input {
+        color: navy;
+    }
+    form.new_transaction {
+        position: relative;
+    }
+    form.new_transaction:hover + div.help {
+        display: block;
+    }
+    div.help {
+        color: navy;
+        display: none;
+        font-family: "Verdana", Geneva, sans-serif;
+        padding: 10px;
+        position: absolute;
+        top: 110px;
+    }
+</style>
+{% load customtags %}
+
+{# Page Body #}
+<body>
+    {# Page Top #}
+    <h1>Latest Transactions</h1>
+    <div>
+        <a href="{% url 'ericoin:transactions' %}"><button type="button">Refresh</button></a>
+        <a href="{% url 'ericoin:index' %}"><button type="button">Return</button></a>
+    </div>
+    <br><br><br>
+    
+    {# Send transaction box #}
+    <form class="new_transaction" action="/ericoin/posted-transaction/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        {% if form.non_field_errors %}
+            <div class="non-field-errors">
+                {% for err in form.non_field_errors %}
+                    <p class="form-error">{{ err }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <table>
+            <tr><th colspan="2">New transaction: </th></tr>
+            <tr><td>Recipient public key: </td><td><input style="width: 600px" type="text" name="recipient"></td></tr>
+            <tr><td>Amount to transfer: </td><td><input style="width: 600px" type="text" name="amount"></td></tr>
+            <tr><td>Sender public key: </td><td><input style="width: 600px" type="text" name="sender"></td></tr>
+            <tr><td>Message (must be unique): </td><td><input style="width: 600px" type="text" name="message"></td></tr>
+            <tr><td>Transaction signature: </td><td><input style="width: 600px" type="text" name="signature"></td></tr>
+            <tr><td colspan="2" style="text-align: center"><input type="submit" value="Send"></input></td></tr>
+        </table>
+    </form>
+    <div class="help">
+        <b>Help:</b> You must generate transaction signature with the help of your own private key and <i>sign_transaction.py</i>!
+    </div>  
+    
+    {# List of old transactions #}
+    {% with view.get_transaction_history as transaction_info %}
+        {% with transaction_info|return_item:0 as b_index and transaction_info|return_item:1 as t_index and transaction_info|return_item:2 as transactions and transaction_info|return_item:3 as reward %}
+            {% for transaction in transactions %}
+                {% if reward|return_item:forloop.counter0 == 0 %}    
+                    <table class="transaction_history">
+                        <tr><th colspan="2">Transaction {{t_index|return_item:forloop.counter0}}</th></tr>
+                        <tr><td>In block: </td><td>{{b_index|return_item:forloop.counter0}}</td>
+                        <tr><td>Amount: </td><td>{{transaction|return_item:0}}</td>
+                        <tr><td>Hash: </td><td>{{transaction|return_item:1}}</td>
+                        <tr><td>Message (Nonce): </td><td>{{transaction|return_item:2}}</td>
+                        <tr><td>Recipient: </td><td>{{transaction|return_item:3}}</td>
+                        <tr><td>Sender: </td><td>{{transaction|return_item:4}}</td>
+                        <tr><td>Signature: </td><td>{{transaction|return_item:5}}</td>
+                    </table>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+    {% endwith %}
+</body>
+

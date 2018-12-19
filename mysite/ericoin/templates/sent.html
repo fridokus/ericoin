@@ -1,0 +1,41 @@
+{# Page Header and Styling #}
+<head>
+    <title>Ericoin Transaction Sent</title>
+</head>
+<style type="text/css">
+    h1, h2, h3 {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        }
+    p, ul, li {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        font-size: 20;
+        margin: 10px 0px;
+        text-align: left;
+        }
+</style>
+{% load customtags %}
+
+{# Page Body #}
+<body>
+    {# Page Top #}
+    <h2>Transaction sent to network!</h2>
+    
+    {# List of transaction responses #}
+    <p>Received the following responses from mining nodes:</p>
+    <ul style="list-style-type: circle;">
+        {% for s in status %}
+            <li style="font-size: 16">{{s}}</li>
+        {% endfor %}
+    </ul>
+    <p>Wait until the next block has been mined for transaction confirmation.</p>
+    
+    {# Menu #}
+    <h3>What would you like to do next?</h3>
+    <ul style="list-style-type: disc;">
+        <li><a href="{% url 'ericoin:transactions' %}">Return to view of transactions</a></li>
+        <li><a href="{% url 'ericoin:index' %}">See portal main page</a></li>
+    </ul>
+</body>
+
