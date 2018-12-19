@@ -1,0 +1,73 @@
+{# Page Header and Styling #}
+<head>
+    <title>Ericoin Portal</title>
+</head>
+<style type="text/css">
+    h1, h2, h3 {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        }
+    p, ul, li {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        font-size: 20;
+        margin: 10px 0px;
+        text-align: left;
+        }
+    table {
+        border: 3px solid navy;
+        border-radius: 10px;
+        color: navy;
+        font-family: "Courier New", Courier, monospace;
+        }
+    td {
+        color: navy;
+        text-align: left;
+        }
+    th {
+        color: navy;
+        font-size: 20;
+        text-align: left;
+        }
+    p.help_button:hover + div.help {
+        display: block;
+    }
+    div.help {
+        color: navy;
+        display: none;
+        font-family: "Verdana", Geneva, sans-serif;
+    }
+</style>
+{% load customtags %}
+
+{# Page Body #}
+<body>
+    {# Page Top #}
+    <h1>Welcome to the Ericoin Portal!</h1>
+    <p>Please choose an action you would like to do: <a href="{% url 'ericoin:index' %}" style="position: absolute; right: 770px;"><button type="button">Refresh</button></a></p>
+
+    {# Latest mined block #}
+    {% with view.get_latest_block as block %}
+        <table class="last_block" style="position: absolute; right: 50px; ">
+            <tr><th colspan="2">Latest block in the chain:</th></tr>
+            <tr><td>Block: </td><td>{{block|return_item:0}}</td>
+            <tr><td>Nonce: </td><td>{{block|return_item:1}}</td>
+            <tr><td>Previous hash: </td><td>{{block|return_item:2}}</td>
+            <tr><td>Target: </td><td>{{block|return_item:3}}</td>
+            <tr><td>Time stamp: </td><td>{{block|return_item:4}}</td>
+        </table>
+    {% endwith %}
+
+    {# Menu #}
+    <ul style="list-style-type: disc;">
+        <li><a href="{% url 'ericoin:balances' %}">Check Balances</a></li>
+        <li><a href="{% url 'ericoin:blockchain' %}">See Blockchain</a></li>
+        <li><a href="{% url 'ericoin:transactions' %}">View Transactions</a></li>
+    </ul>
+
+    {# Help at Ericoin Confluence #}
+    <br>
+    <p class="help_button"><a target="_blank" href="https://pdupc-confluence.mo.sw.ericsson.se/display/GW/Ericoin">Help</a></p>
+    <div class="help">https://pdupc-confluence.mo.sw.ericsson.se/display/GW/Ericoin</div>
+</body>
+

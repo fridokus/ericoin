@@ -1,0 +1,67 @@
+{# Page Header and Styling #}
+<head>
+    <title>Ericoin Blockchain</title>
+</head>
+<style type="text/css">
+    h1, h2, h3 {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        }
+    table {
+        border: 3px solid navy;
+        border-radius: 10px;
+        color: navy;
+        font-family: "Courier New", Courier, monospace;
+        }
+    td {
+        color: navy;
+        text-align: left;
+        }
+    th {
+        color: navy;
+        font-size: 20;
+        text-align: center;
+        }
+    button.button {
+        background-color: gray
+        border-radius: 2px;
+        color: navy;
+        text-align: center;
+    }
+    div.vl {
+        border-right: 3px dashed navy;
+        height: 50px;
+        width: 50px;
+    }
+</style>
+{% load customtags %}
+
+{# Page Body #}
+<body>
+    {# Page Top #}
+    <h1>The Ericoin Blockchain</h1>
+    <div>
+        <a href="{% url 'ericoin:blockchain' %}"><button type="button">Refresh</button></a>
+        <a href="{% url 'ericoin:index' %}"><button type="button">Return</button></a>
+    </div>
+
+    {# List of mined blocks #}
+    {% with view.get_block_chain as block_chain %}
+        {% for block in block_chain %}
+            <table>
+                <tr><th colspan="2">Block {{block|return_item:0}}</th></tr>
+                <tr><td>Nonce: </td><td>{{block|return_item:1}}</td>
+                <tr><td>Previous hash: </td><td>{{block|return_item:2}}</td>
+                <tr><td>Target: </td><td>{{block|return_item:3}}</td>
+                <tr><td>Time stamp: </td><td>{{block|return_item:4}}</td>
+            </table>
+            <div class="vl"></div>
+        {% endfor %}
+        
+        {# Error message in case data fails to load #}
+        {% if block_chain|length == 0 %}
+            <h3>Failed to get data, update page!</h3>
+        {% endif %}
+    {% endwith %}
+</body>
+

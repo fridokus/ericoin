@@ -1,0 +1,50 @@
+{# Page Header and Styling #}
+<head>
+    <title>Ericoin Balances</title>
+</head>
+<style type="text/css">
+    h1, h2, h3 {
+        color: navy;
+        font-family: "Verdana", Geneva, sans-serif;
+        }
+    table, td, th {
+        border: 2px solid navy;
+        border-collapse: collapse;
+        color: navy;
+        font-family: "Courier New", Courier, monospace;
+        text-align: left; 
+        }
+</style>
+{% load customtags %}
+
+{# Page Body #}
+<body>
+    {# Page Top #}
+    <h1>Account Balances</h1>
+    <div>
+        <a href="{% url 'ericoin:balances' %}"><button type="button">Refresh</button></a>
+        <a href="{% url 'ericoin:index' %}"><button type="button">Return</button></a>
+    </div>
+    
+    {# Table of network account balances #}
+    {% with view.get_account_balances|return_item:0 as accounts and view.get_account_balances|return_item:1 as account_balances %}
+        <table>
+            <tr>
+                <th>Account (Public Key)</th>
+                <th>Balance (Ericoins)</th>
+            </tr>
+            {% for acc in accounts %}
+                <tr>
+                    <td>{{acc}}</td>
+                    <td>{{account_balances|return_item:forloop.counter0}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        
+        {# Error message in case data fails to load #}
+        {% if accounts|length == 0 and account_balances|length == 0 %}
+            <h3>Failed to get data, update page!</h3>
+        {% endif %}
+    {% endwith %}
+</body>
+
